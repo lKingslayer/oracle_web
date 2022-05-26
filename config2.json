@@ -1,0 +1,7 @@
+{
+    "root_dir": "../SimCLR-release/",
+    "checkpoint": "./proto_checkpoints/supervised_0100.pth.tar",
+    "feat": "feats/predict_feats.pth",
+    "paths": "feats/predict_paths.json"
+}
+

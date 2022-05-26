@@ -1,0 +1,13 @@
+body {
+  background: url(./base/assets/bg.png) no-repeat center 2rem;
+  background-size: 100%;
+  background-color: #F4F4F4;
+}
+
+.starter-template {
+  margin-top: 17rem;
+}
+
+.bg-light {
+  background-color: #F4F4F4 !important;
+}

@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block Style %}
+    <link href="{{ url_for('static', filename='search-view.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='fonts.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='aliyun/common.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='aliyun/main.css') }}" rel="stylesheet">
+
+    <style>
+        body{
+            background-color: #F4F4F4;
+        }
+
+    </style>
+
+    <script>
+    $(document).ready(function(){
+      $(".dropdownItem").click(function(){
+        $("#sel").val( $(this).attr("name") );
+        $("#dropdownTitle").text( $(this).text() + " " )
+      });
+
+      $(".detection").mouseover(function(){
+        $(this).find("polyline").css('stroke', '#fff');
+        $(this).children("div").show();
+      });
+      $(".detection").mouseout(function(){
+        $(this).find("polyline").css('stroke', '#00CDEC');
+        $(this).children("div").hide();
+      });
+    });
+
+    </script>
+{% endblock %}
+
+{% block header %}
+          <li class="nav-item" style="margin-right:1rem;">
+            <a class="nav-link" href="/">字形</a>
+          </li>
+          <li class="nav-item active" style="margin-right:55rem;">
+            <a class="nav-link" href="/script/">甲片<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item" style="margin-right:1rem;">
+            <a class="nav-link" href="#">联系我们</a>
+          </li>
+{% endblock %}
+
+
+{% block Intro %}
+    <div class="container mt-4 mb-4">
+          <div class="col-md-6" style="padding-left:9px">
+            <!-- form info in search box -->
+            <form id="search" method="post">
+              <input type="hidden" name="selection" id="sel" value="script" name="甲片序号">
+              <div class="input-group">
+
+                   <!-- name 'ID' in form will be registered -->
+                   <input type="text" class="form-control" placeholder={{ id }} name="ID" required="required"/>
+                   <span class="input-group-btn">
+                     <!-- onClick() = submit form -->
+                     <button class="btn btn-rev" type="submit">
+                       <img src="{{ url_for('static', filename='base/assets/search.png') }}"
+                            style="height:29pt; width:38pt">
+                     </button>
+                   </span>
+              </div>
+            </form><!-- end form -->
+           </div>
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block Upload %}
+{% endblock %}
+
+{% block Content %}
+  <main class="container theme-showcase" role="main">
+
+    <!-- 甲片图片轮播 -->
+    <div id="demo" class="carousel slide" data-ride="carousel" data-interval=false>
+
+      <!-- 指示符 -->
+
+      <ul class="carousel-indicators">
+          {% for context in url_script %}
+             {% if loop.length > 1 %}
+                {% if loop.first %}
+                <li data-target="#demo" data-slide-to="{{ loop.index0 }}" class="active"></li>
+                {% else %}
+                <li data-target="#demo" data-slide-to="{{ loop.index0 }}"></li>
+                {% endif %}
+             {% endif %}
+          {% endfor %}
+      </ul>
+
+      <!-- 轮播图片 -->
+      <div class="carousel-inner" style="height: 30rem; padding-left:9px; padding-right:9px">
+          {% for context in url_script %}
+            {% if loop.first %}
+                <div class="carousel-item active" style="text-align: center; background-color: white; border-radius: 0.5rem">
+                  <img src="{{ context }}" style="height: 30rem;">
+                </div>
+            {% else %}
+                <div class="carousel-item" style="text-align: center; background-color: white; border: 0.5rem">
+                  <img src="{{ context }}" style="height: 30rem;">
+                </div>
+            {% endif %}
+          {% endfor %}
+
+      <!-- 左右切换按钮 -->
+      {% if url_script|length > 1 %}
+      <a class="carousel-control-prev" href="#demo" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      </a>
+      <a class="carousel-control-next" href="#demo" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      </a>
+      {% endif %}
+      </div>
+    </div>
+
+    <!-- 甲片及其释文展示区 -->
+    <!-- TODO: jinja2结合col改为竖排展示 -->
+    <div class="row">
+          <div class="col-md-6 mt-4">
+              <div class="d-inline-flex">
+                <img src="{{ url_for('static', filename='base/icon/bar.png') }}" style="height: 1.75rem; padding-bottom: 0.25rem">
+                <h5> 甲片单字 </h5>
+              </div>
+                <div class="row pl-4">
+                    {% for ora in oracle %}
+                        <img class="img-contain mr-2 mb-2" src={{ora}} style="width:80px; height:80px; border-radius:0.5rem; background-color:white">
+                    {% endfor %}
+                </div>
+          </div>
+
+          <div class="col-md-6 mt-4">
+              <div class="d-inline-flex">
+                <img src="{{ url_for('static', filename='base/icon/bar.png') }}" style="height: 1.75rem; padding-bottom: 0.25rem">
+                <h5> 对应释文 </h5>
+              </div>
+                <div class="row pl-4">
+                    {% for word in words %}
+                        <img class="img-contain mr-2 mb-2" src={{word}} style="width:80px; height:80px; border-radius:0.5rem; background-color:white">
+                    {% endfor %}
+                </div>
+          </div>
+    </div>
+
+  </main>
+{% endblock %}

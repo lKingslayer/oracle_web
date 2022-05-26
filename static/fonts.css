@@ -1,0 +1,29 @@
+body, button, input,
+select, textarea,
+h1, h2, h3, h4, h5, h6 {
+  font-family: '微软雅黑', '宋体','ics3', 'ics4', 'chant', Tahoma,
+  Helvetica, Arial,
+  "\5b8b\4f53", sans-serif;
+}
+
+.lead {
+  font-size: 1.1rem;
+  font-weight: 300;
+}
+@font-face {
+    font-family: ics3;
+    src: url("./fonts/ics3.ttf")
+}
+
+@font-face {
+    font-family: ics4;
+    src: url("./fonts/ics4.ttf")
+}
+@font-face {
+    font-family: chant;
+    src: url("./fonts/chant.ttf")
+}
+
+.jiaguwen {
+    font-family: '微软雅黑', '宋体', 'PingFang','ics3', 'ics4', 'chant';
+}

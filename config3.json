@@ -1,0 +1,6 @@
+{
+    "root_dir": "../SimCLR-release/",
+    "checkpoint": "./checkpoints/trans_mix_handa_256_best.pth.tar",
+    "feat": "feats/handa_classes_white_dual_feats.pth",
+    "paths": "feats/handa_classes_white_dual_paths.json"
+}

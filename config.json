@@ -1,0 +1,6 @@
+{
+    "root_dir": "../simclr/",
+    "checkpoint": "./checkpoints/trans_mix_handa_256_best.pth.tar",
+    "feat": "feats/handa_oracle_db_feats.pth",
+    "paths": "feats/handa_oracle_db_paths.json"
+}

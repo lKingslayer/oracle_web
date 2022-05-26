@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block Style %}
+    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='fonts.css') }}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='pricing.css') }}" rel="stylesheet">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+    <script>
+    $(document).ready(function(){
+      $(".col-md-1").click(function(){
+        $(this).nextUntil(".col-md-1").modal('show');
+      });
+      $(".col-sm-1").click(function(){
+        //../static/oracle/context/00057/00057-169-1.png
+        var imgsrc = $(this).find("img").attr("src");
+        var x = parseInt( imgsrc.split('/')[4] );
+        var url = '/script/'.concat(x);
+        //window.alert(url);
+        window.open(url);
+      });
+    });
+    </script>
+{% endblock %}
+
+
+{% block Intro %}
+
+<div class="pricing-header px-3 py-3 pt-md-4 pb-md-4 mx-auto text-center">
+  <h1>甲骨规范字形库</h1>
+  <p class="lead">共收录《甲骨文合集》中300余个甲骨文及其关联甲片</p>
+</div>
+
+{% endblock %}
+
+{% block Upload %}
+{% endblock %}
+
+{% block Content %}
+
+<div class="container">
+
+    <div class="row">
+        {% for i in range(len) %}
+        {% set word, images = img_dict['word'][i], img_dict['images'][i] %}
+        <div class="col-md-1 mb-1">
+            <img class="img-thumbnail mx-auto" src={{word}} style="width:100%; height:66px;">
+        </div>
+        <div class="modal fade">
+          <div class="modal-dialog" style="max-width:1010px;">
+            <div class="modal-content">
+              <!-- 模态框头部 -->
+              <div class="modal-header">
+                <h4 class="modal-title">甲骨文所属甲片（点击可跳转）</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- 模态框主体 -->
+              <div class="modal-body">
+                <div class="card bg-light text-dark">
+                    <div class="card-body">
+                        <div class="row">
+                        {% for img in images %}
+                          <div class="col-sm-1">
+                            <img src="{{ img }}" class="figure-img img-fluid rounded ml-auto mr-auto">
+                          </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <!-- 模态框底部 -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

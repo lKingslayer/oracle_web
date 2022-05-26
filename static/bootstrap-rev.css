@@ -1,0 +1,42 @@
+.navbar-brand {
+  padding-top: 0.225rem;
+  padding-bottom: 0.225rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.bg-dark {
+    background-color: #000 !important;
+}
+
+.img-crop{
+    object-fit: cover;
+}
+
+.img-fill{
+    object-fit: fill;
+}
+
+.img-contain{
+    object-fit: contain;
+}
+
+.carousel-control-prev-icon {
+  background-image: url("./base/assets/arrow_left.png");
+  width: 4rem;
+  height: 4rem;
+}
+
+.carousel-control-next-icon {
+  background-image: url("./base/assets/arrow_right.png");
+  width: 4rem;
+  height: 4rem;
+}
+
+.carousel-indicators li {
+  width: 80px;
+}
+
+.carousel-indicators .active {
+  background-color: #FF9800;
+}

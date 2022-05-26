@@ -1,0 +1,221 @@
+
+{% extends 'base.html' %}
+
+{% block Style %}
+    <link href="{{ url_for('static', filename='search-view.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='fonts.css') }}" rel="stylesheet">
+
+    <style>
+        body{
+            background-color: #F4F4F4;
+        }
+
+    </style>
+
+    <script>
+    $(document).ready(function(){
+      $("a.display-oracle").mouseover(function(){
+      console.log("mouseover");
+      console.log($(this).children("img"));
+        $(this).children("img").css("margin-top", "0px");
+        console.log($(this).children("img"));
+      });
+      $("a.display-oracle").mouseout(function(){
+      console.log("mouseout");
+        $(this).children("img").css("margin-top", "8px");
+      });
+    });
+
+    </script>
+{% endblock %}
+
+
+{% block Intro %}
+    <div class="container mt-4 mb-4">
+          <div class="col-md-6" style="padding-left:9px">
+            <!-- form info in search box -->
+            <form id="search" method="post" enctype="multipart/form-data">
+              <div class="input-group">
+                   <input type="hidden" name="selection" id="sel" value="chinese" name = "甲片序号">
+                   <input type="text" id="id_input" class="form-control" placeholder="点击右侧图标进行手写/图像识别" name="ID" required="required" style="border-color:rgb(255,255,255);height:31pt"/>
+                   <input type="file" id="image_uploader" name="image_uploader" accept="image/*" style="display: none;height:28pt"/>
+                   <span class="input-group-append" style="border:1px; background-color:#fff;">
+                      <img src="{{ url_for('static', filename='base/assets/write.png') }}" id="write"
+                            style="cursor:pointer; padding:5pt; height:28pt; width:28pt">
+                     <img src="{{ url_for('static', filename='base/assets/camera.png') }}" id="upload"
+                          title="点击上传甲骨文图片" style="cursor:pointer; padding:5pt; padding-right:10pt; height:28pt; width:33pt">
+                   </span>
+                   <span class="input-group-btn">
+                     <button class="btn btn-rev" id="btn_submit" type="submit">
+                       <img src="{{ url_for('static', filename='base/assets/search.png') }}"
+                            style="height:29pt; width:38pt">
+                     </button>
+                   </span>
+
+              </div>
+            </form><!-- end form -->
+           </div>
+    </div><!-- /.container -->
+{% endblock %}
+
+
+{% block Content %}
+  <main class="container theme-showcase" role="main">
+    <div class="row">
+          <div class="col-md-6 mt-2">
+              <div class="d-inline-flex">
+                <img src="{{ url_for('static', filename='base/icon/bar.png') }}" class="img-contain"
+                     style="height: 1.75rem; padding-bottom: 0.25rem">
+                <h5> 我的上传 </h5>
+              </div>
+                <div class="row pl-4">
+                    {% set folder = url_for('static', filename='base/temp/') %}
+                    <img class="img-contain mr-2 mb-2 mt-2" src="{{ [folder, upload] | join }}"
+                    style="width:80px; height:80px; border-radius:0.5rem; background-color:white">
+                </div>
+          </div>
+    </div>
+
+    <div class="row">
+          <div class="col-md-12" style="margin-top:30px">
+              <div class="d-inline-flex">
+                <img src="{{ url_for('static', filename='base/icon/bar.png') }}" style="height: 1.75rem; padding-bottom: 0.25rem">
+                <h5> 手写识别结果 </h5>
+              </div>
+              <p>Euclidean Distance</p>
+                <div class="row pl-4">
+                    {% for res in result[0] %}
+                    {% set folder = url_for('static', filename='./') %}
+                    <!-- <a class="display-oracle" href={{ url_for('search_character', id=res | replace('.jpg', '')) }} style="font-size: 0px" -->
+                    <a class="display-oracle"  style="font-size: 0px"
+                       title="点击查看全部甲骨字形">
+                        <img id="img" class="img-contain mb-1" src={{ folder ~ res }} style="width:80px; height:80px; margin-top:8px;
+                             border-top-left-radius:0.5rem; border-bottom-left-radius:0.5rem; background-color:white" onclick="openChant(this)">
+                        <!-- <img class="img-contain mr-3 mb-1" src={{ folder | replace('top', res[0]) | replace('.jpg', '') ~ res[1] }} style="width:80px; height:80px; -->
+                             <!-- border-top-right-radius:0.5rem; border-bottom-right-radius:0.5rem; background-color:white; margin-top:8px"> -->
+                    </a>
+                    {% endfor %}
+                </div>
+                <p>Cosine Distance</p>
+                <div class="row pl-4">
+                    {% for res in result[1] %}
+                    {% set folder = url_for('static', filename='./') %}
+                    <!-- <a class="display-oracle" href={{ url_for('search_character', id=res | replace('.jpg', '')) }} style="font-size: 0px" -->
+                    <a class="display-oracle"  style="font-size: 0px"
+                       title="点击查看全部甲骨字形">
+                        <img class="img-contain mb-1" src={{ folder ~ res }} style="width:80px; height:80px; margin-top:8px;
+                             border-top-left-radius:0.5rem; border-bottom-left-radius:0.5rem; background-color:white" onclick="openImg(this)">
+                        <!-- <img class="img-contain mr-3 mb-1" src={{ folder | replace('top', res[0]) | replace('.jpg', '') ~ res[1] }} style="width:80px; height:80px; -->
+                             <!-- border-top-right-radius:0.5rem; border-bottom-right-radius:0.5rem; background-color:white; margin-top:8px"> -->
+                    </a>
+                    {% endfor %}
+                </div>
+          </div>
+
+    </div>
+
+     <!-- image uploader
+    ================================================== -->
+    <div class="modal fade" id="modal_uploader">
+        <div class="modal-dialog" style="max-width:1010px;">
+            <div class="modal-content">
+              <!-- 模态框头部Title -->
+              <div class="modal-header">
+                  <div class="d-inline-flex pt-2">
+                    <img src="{{ url_for('static', filename='base/icon/bar.png') }}" style="height: 1.75rem; padding-bottom: 0.25rem">
+                    <h5>手写甲骨文字</h5>
+                  </div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- 模态框主体内容：手写板或图片 -->
+              <div class="modal-body">
+                <div class="card bg-light text-dark">
+                    <div class="card-body" id="imgContainer" style="text-align: center;">
+
+                    </div>
+                </div>
+              </div>
+              <!-- 模态框底部按钮 -->
+              <div class="modal-footer">
+                  <button class="btn" type="button" id="recognition" onclick="ImageUpload()">
+                       <img src="{{ url_for('static', filename='base/assets/search.png') }}"
+                            style="height:29pt; width:38pt; border-radius:0.5rem">
+                  </button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+   <!-- board uploader
+    ================================================== -->
+    <div class="modal fade" id="modal_board">
+        <div class="modal-dialog" style="max-width:550px;">
+            <div class="modal-content">
+              <!-- 模态框头部Title -->
+              <div class="modal-header">
+                  <div class="d-inline-flex pt-2">
+                    <img src="{{ url_for('static', filename='base/icon/bar.png') }}" style="height: 1.75rem; padding-bottom: 0.25rem">
+                    <h5>手写甲骨文字</h5>
+                  </div>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <!-- 模态框主体内容：手写板或图片 -->
+              <div class="modal-body">
+                <div class="card bg-light text-dark">
+                    <div style="width:275px;height:500px;margin:0 auto;">
+                        <canvas class="canvas-box" id="canvas" style = "background-color: #fff;border: none;"></canvas>
+                    </div>
+                </div>
+              </div>
+              <!-- 模态框底部按钮 -->
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" onclick="clearDraw()">清除</button>
+                  <button class="btn" type="button" id="recognition" onclick="canvasSaveToServer()">
+                       <img src="{{ url_for('static', filename='base/assets/search.png') }}"
+                            style="height:29pt; width:38pt; border-radius:0.5rem">
+                  </button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        // 文件上传图片
+        $("#upload").click(function(){
+            $("#image_uploader").click();
+        });
+
+        // 手写板显示
+        $("#write").click(function(){
+            $("#modal_board").modal('show');
+        });
+
+        // 照片上传显示
+        $("#image_uploader").change(function(){
+            var file = $(this).prop('files')[0];
+            getImgsByFileReader($("#imgContainer"), file);
+            $("#modal_uploader").modal('show');
+        });
+
+        // 点击搜索出来图片
+        $(".png").click(function() {
+            // add active class to clicked picture
+            $(this).addClass("active")
+            // grab image url
+            var image = $(this).attr("src")
+            console.log(image)
+        });
+
+    </script>
+
+    <script src="{{ url_for('static', filename='js/image_board.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image_uploader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/click_img.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/open_to_chant.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/wzb2chant.js') }}"></script>
+
+
+  </main>
+{% endblock %}
